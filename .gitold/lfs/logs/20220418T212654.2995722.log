@@ -1,0 +1,108 @@
+git-lfs/3.0.1 (GitHub; windows amd64; go 1.17.1)
+git version 2.33.1.windows.1
+
+$ git-lfs.exe filter-process
+Error downloading object: Assets/Extractions/Sprites/Basic/Basic_attack.png (14d19f0): Smudge error: Error downloading Assets/Extractions/Sprites/Basic/Basic_attack.png (14d19f0a35e5ac4ac4b5f576b90c12fa257e2b89115157a6787b2953a5e753ca): batch response: This repository is over its data quota. Account responsible for LFS bandwidth should purchase more data packs to restore access.
+
+This repository is over its data quota. Account responsible for LFS bandwidth should purchase more data packs to restore access.
+batch response
+github.com/git-lfs/git-lfs/v3/errors.newWrappedError
+	D:/a/git-lfs/git-lfs/errors/types.go:225
+github.com/git-lfs/git-lfs/v3/errors.Wrap
+	D:/a/git-lfs/git-lfs/errors/errors.go:74
+github.com/git-lfs/git-lfs/v3/tq.(*tqClient).Batch
+	D:/a/git-lfs/git-lfs/tq/api.go:95
+github.com/git-lfs/git-lfs/v3/tq.Batch
+	D:/a/git-lfs/git-lfs/tq/api.go:43
+github.com/git-lfs/git-lfs/v3/tq.(*TransferQueue).enqueueAndCollectRetriesFor
+	D:/a/git-lfs/git-lfs/tq/transfer_queue.go:558
+github.com/git-lfs/git-lfs/v3/tq.(*TransferQueue).collectBatches.func1
+	D:/a/git-lfs/git-lfs/tq/transfer_queue.go:452
+runtime.goexit
+	go/src/runtime/asm_amd64.s:1581
+Error downloading Assets/Extractions/Sprites/Basic/Basic_attack.png (14d19f0a35e5ac4ac4b5f576b90c12fa257e2b89115157a6787b2953a5e753ca)
+github.com/git-lfs/git-lfs/v3/errors.newWrappedError
+	D:/a/git-lfs/git-lfs/errors/types.go:225
+github.com/git-lfs/git-lfs/v3/errors.Wrapf
+	D:/a/git-lfs/git-lfs/errors/errors.go:85
+github.com/git-lfs/git-lfs/v3/lfs.(*GitFilter).downloadFile
+	D:/a/git-lfs/git-lfs/lfs/gitfilter_smudge.go:119
+github.com/git-lfs/git-lfs/v3/lfs.(*GitFilter).Smudge
+	D:/a/git-lfs/git-lfs/lfs/gitfilter_smudge.go:78
+github.com/git-lfs/git-lfs/v3/commands.smudge
+	D:/a/git-lfs/git-lfs/commands/command_smudge.go:127
+github.com/git-lfs/git-lfs/v3/commands.filterCommand
+	D:/a/git-lfs/git-lfs/commands/command_filter_process.go:122
+github.com/spf13/cobra.(*Command).execute
+	go/pkg/mod/github.com/spf13/cobra@v0.0.3/command.go:766
+github.com/spf13/cobra.(*Command).ExecuteC
+	go/pkg/mod/github.com/spf13/cobra@v0.0.3/command.go:852
+github.com/spf13/cobra.(*Command).Execute
+	go/pkg/mod/github.com/spf13/cobra@v0.0.3/command.go:800
+github.com/git-lfs/git-lfs/v3/commands.Run
+	D:/a/git-lfs/git-lfs/commands/run.go:105
+main.main
+	D:/a/git-lfs/git-lfs/git-lfs.go:33
+runtime.main
+	go/src/runtime/proc.go:255
+runtime.goexit
+	go/src/runtime/asm_amd64.s:1581
+Smudge error
+github.com/git-lfs/git-lfs/v3/errors.newWrappedError
+	D:/a/git-lfs/git-lfs/errors/types.go:225
+github.com/git-lfs/git-lfs/v3/errors.NewSmudgeError
+	D:/a/git-lfs/git-lfs/errors/types.go:311
+github.com/git-lfs/git-lfs/v3/lfs.(*GitFilter).Smudge
+	D:/a/git-lfs/git-lfs/lfs/gitfilter_smudge.go:87
+github.com/git-lfs/git-lfs/v3/commands.smudge
+	D:/a/git-lfs/git-lfs/commands/command_smudge.go:127
+github.com/git-lfs/git-lfs/v3/commands.filterCommand
+	D:/a/git-lfs/git-lfs/commands/command_filter_process.go:122
+github.com/spf13/cobra.(*Command).execute
+	go/pkg/mod/github.com/spf13/cobra@v0.0.3/command.go:766
+github.com/spf13/cobra.(*Command).ExecuteC
+	go/pkg/mod/github.com/spf13/cobra@v0.0.3/command.go:852
+github.com/spf13/cobra.(*Command).Execute
+	go/pkg/mod/github.com/spf13/cobra@v0.0.3/command.go:800
+github.com/git-lfs/git-lfs/v3/commands.Run
+	D:/a/git-lfs/git-lfs/commands/run.go:105
+main.main
+	D:/a/git-lfs/git-lfs/git-lfs.go:33
+runtime.main
+	go/src/runtime/proc.go:255
+runtime.goexit
+	go/src/runtime/asm_amd64.s:1581
+
+Current time in UTC: 
+2022-04-18 19:26:54
+
+ENV:
+LocalWorkingDir=C:\Users\swarw\Desktop\Switched
+LocalGitDir=C:\Users\swarw\Desktop\Switched\.git
+LocalGitStorageDir=C:\Users\swarw\Desktop\Switched\.git
+LocalMediaDir=C:\Users\swarw\Desktop\Switched\.git\lfs\objects
+LocalReferenceDirs=
+TempDir=C:\Users\swarw\Desktop\Switched\.git\lfs\tmp
+ConcurrentTransfers=8
+TusTransfers=false
+BasicTransfersOnly=false
+SkipDownloadErrors=false
+FetchRecentAlways=false
+FetchRecentRefsDays=7
+FetchRecentCommitsDays=0
+FetchRecentRefsIncludeRemotes=true
+PruneOffsetDays=3
+PruneVerifyRemoteAlways=false
+PruneRemoteName=origin
+LfsStorageDir=C:\Users\swarw\Desktop\Switched\.git\lfs
+AccessDownload=basic
+AccessUpload=basic
+DownloadTransfers=basic,lfs-standalone-file,ssh
+UploadTransfers=basic,lfs-standalone-file,ssh
+GIT_EXEC_PATH=C:/Program Files/Git/mingw64/libexec/git-core
+GIT_LFS_PATH=C:\Program Files\Git LFS
+GIT_PREFIX=
+
+Client IP addresses:
+2a01:cb04:be:2f00:54d3:f4c4:dd86:96bb 2a01:cb04:be:2f00:8541:12f5:8ccd:297a fe80::54d3:f4c4:dd86:96bb 192.168.1.12
+fe80::3951:17f1:5ced:ea05 172.31.0.1
