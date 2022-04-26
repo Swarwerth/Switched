@@ -12,6 +12,21 @@ EditorBuildSettings:
     path: Assets/Scenes/Tuto.unity
     guid: 5b92aa3901b117d408397cfd5ad15d96
   - enabled: 1
+    path: Assets/Scenes/Lobby/Earth/Earth.unity
+    guid: d3f16ac4c80f56540b7fe805fd0f7e69
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Earth/LobbyEarth.unity
+    guid: cfdcccb0f25e7734a91b96a1f40a80bf
+  - enabled: 1
     path: Assets/Scenes/Biomes/Earth/Earth 1.unity
     guid: d5528e450ad2b2a478ff209c4af59075
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Hell/Hell.unity
+    guid: 74a2c70acb40a0c40a7f641607ee512d
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Hell/Lobbyhell.unity
+    guid: 802f986128829314fa2f965a453286df
+  - enabled: 1
+    path: Assets/Scenes/Biomes/Hell/Hell 1.unity
+    guid: f5b1597297ef1684db3184bc4ec235ee
   m_configObjects: {}
