@@ -6,10 +6,12 @@ using Photon.Pun;
 public class Launcher : MonoBehaviourPunCallbacks
 {
     [SerializeField] public PhotonView Player;
+    [SerializeField] public Transform spawnPoint;
 
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+        spawnPoint = GameObject.Find("SpawnPoint").transform;
     }
 
     public override void OnConnectedToMaster() 
@@ -19,6 +21,6 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom() 
     {
-        PhotonNetwork.Instantiate(Player.name, new Vector3(16.75f, -17.6f, 49.5f), Quaternion.identity);
+        PhotonNetwork.Instantiate(Player.name, spawnPoint.position, spawnPoint.rotation);
     }
 }

@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/UI/UIScene.unity
     guid: 8ea7f0c71347cd14da7d399994474b3b
   - enabled: 1
-    path: Assets/Scenes/Level.unity
+    path: Assets/Scenes/Tuto.unity
     guid: 5b92aa3901b117d408397cfd5ad15d96
+  - enabled: 1
+    path: Assets/Scenes/Biomes/Earth/Earth 1.unity
+    guid: d5528e450ad2b2a478ff209c4af59075
   m_configObjects: {}

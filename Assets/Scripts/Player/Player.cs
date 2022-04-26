@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 
 public class Player : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject rayObject;
     [SerializeField] public Transform refForGameover;
+    [SerializeField] public Transform spawnPoint;
 
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
@@ -33,23 +36,58 @@ public class Player : MonoBehaviourPunCallbacks
 
     [Header("Collision")]
     public bool onGround = false;
-    public float groundLength = 0.6f;
+    public float groundLength = 0.4f;
     public Vector3 colliderOffset;
 
-    //Wall movement
+    [Header("Life")]
+    public int health;
+    public int maxHealth;
+    public Image healthBar;
+    private int cntDeath;
+
+    [Header("Attack")]
+    public float startTimeBetweenAttack;
+    private float timeBetweenAttack;
+    public Transform attackPos;
+    public float attackRange;
+    public LayerMask whatIsEnemy;
+    public int damage;
+    public ParticleSystem blood;
+
+    [Header("Wall Movement")]
     public bool walled, wallMove;
     bool[] wallHits = new bool[4];
 
     private void Start()
     {
+        cntDeath = 0;
         GameController.THIS.isLevelDone = false;
+        refForGameover = GameObject.Find("RefForGameover").transform;
+        spawnPoint = GameObject.Find("SpawnPoint").transform;
     }
 
     void Update()
     {
         if (!photonView.IsMine) return;
 
-        refForGameover = GameObject.Find("RefForGameover").transform;
+        if (health <= 0) Respawn();
+
+        if (cntDeath == 3) Debug.Log("-GAMEOVER-");
+
+        if (timeBetweenAttack >= 0)
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Collider[] enemiesToDamage = Physics.OverlapSphere(attackPos.position, attackRange, whatIsEnemy);
+                timeBetweenAttack = startTimeBetweenAttack;
+                animator.SetTrigger("attack");
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    enemiesToDamage[i].GetComponent<Patrol>().TakeDamage(damage);
+                }
+            }
+        }
+        else timeBetweenAttack -= Time.deltaTime;
 
         if (!GameController.THIS.isLevelDone)
         {
@@ -63,6 +101,13 @@ public class Player : MonoBehaviourPunCallbacks
                 jumpTimer = Time.time + jumpDelay;
                 isJumping = true;
             }
+            
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                PhotonNetwork.Destroy(gameObject);
+                PhotonNetwork.Disconnect();
+                SceneManager.LoadScene(0);
+            }
 
             walled = Physics.Raycast(transform.position, transform.forward, out hit, 4f, LayerMask.GetMask("ladder"));
             direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -73,8 +118,7 @@ public class Player : MonoBehaviourPunCallbacks
 
             if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
             {
-                if (onGround)
-                    rb.velocity = new Vector3(0, 0, 0);
+                if (onGround) rb.velocity = new Vector3(0, 0, 0);
             }
 
             if (Input.GetKey(KeyCode.UpArrow) && walled)
@@ -90,12 +134,10 @@ public class Player : MonoBehaviourPunCallbacks
                 wallMove = false;
                 animator.SetBool("isClimb", false);
             }
-            if (transform.position.y <= refForGameover.position.y)
-            {
-                Debug.Log("LOST");
-            }
+            if (transform.position.y <= refForGameover.position.y) Respawn();
         }
     }
+
     void FixedUpdate()
     {
         if (!GameController.THIS.isLevelDone)
@@ -139,11 +181,24 @@ public class Player : MonoBehaviourPunCallbacks
         { rb.velocity = Vector3.zero; animator.SetBool("isRun", false); }
     }
 
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        blood.Play();
+        healthBar.fillAmount = health / 100f;
+    }
+
+    void Respawn()
+    {
+        health = maxHealth;
+        healthBar.fillAmount = health / 100f;
+        transform.position = spawnPoint.position;
+        cntDeath += 1;
+    }
+
     int dir = 1;
     void moveCharacter(float horizontal)
     {
-        
-
         if (RotRef.side % 2 == 0)
         {
             if (RotRef.side == 0) dir = 1;
@@ -182,6 +237,7 @@ public class Player : MonoBehaviourPunCallbacks
         rb.AddForce(Vector2.up * jumpSpeed, ForceMode.Impulse);
         jumpTimer = 0;
     }
+
     void modifyPhysics()
     {
         bool changingDirections = (direction.x > 0 && rb.velocity.x < 0) || (direction.x < 0 && rb.velocity.x > 0);
@@ -195,11 +251,13 @@ public class Player : MonoBehaviourPunCallbacks
             rb.useGravity = true;
         }
     }
+
     void Flip()
     {
         facingRight = !facingRight;
         characterHolder.gameObject.GetComponent<SpriteRenderer>().flipX = !facingRight;
     }
+
     IEnumerator JumpSqueeze(float xSqueeze, float ySqueeze, float seconds)
     {
         Vector3 originalSize = Vector3.one;
