@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Patrol : MonoBehaviour
 {
     public float speed, attackRange, viewRange;
     private float distance;
     public Transform player;
-    public int health;
+    public float health;
 
     public Transform attackPos;
     public float hitRange;
     public LayerMask whatIsPlayer;
-    public int damage;
+    public float damage;
     public ParticleSystem blood;
 
     [HideInInspector]
@@ -28,7 +29,7 @@ public class Patrol : MonoBehaviour
         player = GameObject.Find("player").transform;
         distance = Vector2.Distance(transform.position, player.position);
 
-        if (health <= 0) Destroy(gameObject);
+        if (health <= 0) PhotonNetwork.Destroy(gameObject);
 
         if (distance <= attackRange) 
         {
@@ -83,7 +84,7 @@ public class Patrol : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
         blood.Play();

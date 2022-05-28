@@ -9,6 +9,12 @@ public class SceneController : MonoBehaviour {
     public GameObject transtionImg;
     public GameObject rotRef;
 
+    void Awake()
+    {
+        Timer.paused = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 
     private IEnumerator Start()
     {
@@ -52,7 +58,6 @@ public class SceneController : MonoBehaviour {
     public void StartLevel(int index)
     {
         SceneManager.LoadScene(index);
-        GameController.THIS.index = index;
     }
     void StartTransition()
     {

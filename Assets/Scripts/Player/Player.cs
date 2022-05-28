@@ -15,12 +15,16 @@ public class Player : MonoBehaviourPunCallbacks
     public float moveSpeed = 10f;
     public Vector2 direction;
     private bool facingRight = true;
+    public float dashSpeed = 5f;
+    private int dashCount = 1;
     
 
     [Header("Vertical Movement")]
     public float jumpSpeed = 15f;
     public float jumpDelay = 0.25f;
     private float jumpTimer;
+    private bool canJump;
+    private int jumpCount = 2;
 
     [Header("Components")]
     public Rigidbody rb;
@@ -40,8 +44,8 @@ public class Player : MonoBehaviourPunCallbacks
     public Vector3 colliderOffset;
 
     [Header("Life")]
-    public int health;
-    public int maxHealth;
+    public float health;
+    public float maxHealth;
     public Image healthBar;
     private int cntDeath;
 
@@ -51,7 +55,7 @@ public class Player : MonoBehaviourPunCallbacks
     public Transform attackPos;
     public float attackRange;
     public LayerMask whatIsEnemy;
-    public int damage;
+    public float damage;
     public ParticleSystem blood;
 
     [Header("Wall Movement")]
@@ -61,15 +65,16 @@ public class Player : MonoBehaviourPunCallbacks
     private void Start()
     {
         cntDeath = 0;
-        GameController.THIS.isLevelDone = false;
         refForGameover = GameObject.Find("RefForGameover").transform;
         spawnPoint = GameObject.Find("SpawnPoint").transform;
     }
 
     void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || Timer.paused) return;
 
+        refForGameover = GameObject.Find("RefForGameover").transform;
+    
         if (health <= 0) Respawn();
 
         if (cntDeath == 3) Debug.Log("-GAMEOVER-");
@@ -83,105 +88,97 @@ public class Player : MonoBehaviourPunCallbacks
                 animator.SetTrigger("attack");
                 for (int i = 0; i < enemiesToDamage.Length; i++)
                 {
-                    enemiesToDamage[i].GetComponent<Patrol>().TakeDamage(damage);
+                    if ((whatIsEnemy.value & 1 << 3) > 0) enemiesToDamage[i].GetComponent<Patrol>().TakeDamage(damage);
+                    if (((whatIsEnemy.value & 1 << 6) > 0) && enemiesToDamage[i] != gameObject) enemiesToDamage[i].GetComponent<Player>().TakeDamage(damage);
                 }
             }
         }
         else timeBetweenAttack -= Time.deltaTime;
 
-        if (!GameController.THIS.isLevelDone)
+        bool wasOnGround = onGround;
+        onGround = Physics.Raycast(transform.position + colliderOffset, Vector2.down, groundLength, groundLayer) ||
+            Physics.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundLayer) ||
+            Physics.Raycast(transform.position, Vector2.down, groundLength, groundLayer);
+
+        if (Input.GetButtonDown("Jump"))
         {
-            bool wasOnGround = onGround;
-            onGround = Physics.Raycast(transform.position + colliderOffset, Vector2.down, groundLength, groundLayer) ||
-                Physics.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundLayer) ||
-                Physics.Raycast(transform.position, Vector2.down, groundLength, groundLayer);
-
-            if (Input.GetButtonDown("Jump"))
+            jumpTimer = Time.time + jumpDelay;
+            if (!onGround && jumpCount > 0) canJump = true;
+            else
             {
-                jumpTimer = Time.time + jumpDelay;
-                isJumping = true;
+                canJump = false;
+                jumpCount = 2;
+                dashCount = 1;
             }
-            
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                PhotonNetwork.Destroy(gameObject);
-                PhotonNetwork.Disconnect();
-                SceneManager.LoadScene(0);
-            }
-
-            walled = Physics.Raycast(transform.position, transform.forward, out hit, 4f, LayerMask.GetMask("ladder"));
-            direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            isMoving = (direction.x != 0);
-
-
-            castRays();
-
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                if (onGround) rb.velocity = new Vector3(0, 0, 0);
-            }
-
-            if (Input.GetKey(KeyCode.UpArrow) && walled)
-            {
-                wallMove = true;
-                animator.SetBool("isClimb", true);
-
-                rb.isKinematic = true;
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow) && wallMove)
-            {
-                rb.isKinematic = false;
-                wallMove = false;
-                animator.SetBool("isClimb", false);
-            }
-            if (transform.position.y <= refForGameover.position.y) Respawn();
         }
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameObject.Find("Pause").GetComponent<Timer>().TogglePause();
+        }
+
+        walled = Physics.Raycast(transform.position, transform.forward, out hit, 4f, LayerMask.GetMask("ladder"));
+        direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        isMoving = (direction.x != 0);
+
+
+        castRays();
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (onGround) rb.velocity = new Vector3(0, 0, 0);
+        }
+
+        if (Input.GetKey(KeyCode.UpArrow) && walled)
+        {
+            wallMove = true;
+            animator.SetBool("isClimb", true);
+            rb.isKinematic = true;
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow) && wallMove)
+        {
+            rb.isKinematic = false;
+            wallMove = false;
+            animator.SetBool("isClimb", false);
+        }
+        if (transform.position.y <= refForGameover.position.y) Respawn();
+        if (!onGround && Input.GetKeyDown(KeyCode.LeftShift) && dashCount > 0) Dash();
     }
 
     void FixedUpdate()
     {
-        if (!GameController.THIS.isLevelDone)
+        if (!wallMove)
+            moveCharacter(direction.x);
+
+        if (wallMove)
         {
-            if (!wallMove)
-                moveCharacter(direction.x);
-
-
-            if (wallMove)
+            if (!walled) { wallMove = false; animator.SetBool("isClimb", false); rb.isKinematic = false; };
+            if (RotRef.side % 2 == 0)
             {
-                if (!walled) { wallMove = false; animator.SetBool("isClimb", false); rb.isKinematic = false; };
-                if (RotRef.side % 2 == 0)
-                {
-                    if (RotRef.side == 0) dir = 1;
-                    else dir = -1;
+                if (RotRef.side == 0) dir = 1;
+                else dir = -1;
 
-                    transform.Translate(direction.x * dir * 0.05f, direction.y * 0.05f, 0);
-                }
-                else
-                {
-                    if (RotRef.side == 1) dir = 1;
-                    else dir = -1;
-
-                    transform.Translate(0, direction.y * 0.05f, direction.x * dir * 0.05f);
-                }
-
-
+                transform.Translate(direction.x * dir * 0.05f, direction.y * 0.05f, 0);
             }
-
-
-            if (jumpTimer > Time.time && (onGround || walled))
+            else
             {
-                walled = false; wallMove = false;
-                rb.isKinematic = false;
-                Jump();
-            }
+                if (RotRef.side == 1) dir = 1;
+                else dir = -1;
 
-            modifyPhysics();
+                transform.Translate(0, direction.y * 0.05f, direction.x * dir * 0.05f);
+            }
         }
-        else
-        { rb.velocity = Vector3.zero; animator.SetBool("isRun", false); }
+        if (jumpTimer > Time.time && (onGround || walled || canJump))
+        {
+            walled = false; 
+            wallMove = false;
+            rb.isKinematic = false;
+            Jump();
+        }
+        modifyPhysics();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
         blood.Play();
@@ -190,10 +187,34 @@ public class Player : MonoBehaviourPunCallbacks
 
     void Respawn()
     {
+        spawnPoint = GameObject.Find("SpawnPoint").transform;
         health = maxHealth;
         healthBar.fillAmount = health / 100f;
         transform.position = spawnPoint.position;
         cntDeath += 1;
+    }
+
+    void Dash()
+    {
+        if (facingRight) 
+        {
+            rb.velocity = Vector2.right * dashSpeed;
+            rb.AddForce(Vector2.up * 5f, ForceMode.Impulse);
+        }
+        if (!facingRight) 
+        {
+            rb.velocity = Vector2.left * dashSpeed;
+            rb.AddForce(Vector2.up * 5f, ForceMode.Impulse);
+        }
+        dashCount --;
+    }
+
+    void Jump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, 0);
+        rb.AddForce(Vector2.up * jumpSpeed, ForceMode.Impulse);
+        jumpTimer = 0;
+        jumpCount--;
     }
 
     int dir = 1;
@@ -230,12 +251,6 @@ public class Player : MonoBehaviourPunCallbacks
             if (onGround)
                 rb.velocity = new Vector3(0,0,0);
         }
-    }
-    void Jump()
-    {
-        rb.velocity = new Vector2(rb.velocity.x, 0);
-        rb.AddForce(Vector2.up * jumpSpeed, ForceMode.Impulse);
-        jumpTimer = 0;
     }
 
     void modifyPhysics()

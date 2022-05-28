@@ -92,7 +92,7 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 64
-  damage: 1
+  damage: 0.5
   blood: {fileID: 2539765992999575286}
   mustPatrol: 1
   mustFlip: 0

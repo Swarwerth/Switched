@@ -6,10 +6,12 @@ using Photon.Pun;
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public Transform spawnPoint;
+    public Transform[] spawnPoints;
 
     private void Start()
     {
-        PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint.position, Quaternion.identity);
+
+        if (PhotonNetwork.IsMasterClient) PhotonNetwork.Instantiate(playerPrefab.name, spawnPoints[0].position, Quaternion.identity);
+        else PhotonNetwork.Instantiate(playerPrefab.name, spawnPoints[0].position, Quaternion.identity);
     }
 }

@@ -266,7 +266,7 @@ MonoBehaviour:
     type: 3}
   playerItemParent: {fileID: 1057243437}
   playButton: {fileID: 1788584415}
-  levelName: Earth 1
+  levelName: Earth Biome
 --- !u!4 &91262932
 Transform:
   m_ObjectHideFlags: 0
@@ -316,7 +316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00014477198}
+  m_AnchoredPosition: {x: 0, y: 0.000061779254}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &554957643
@@ -2280,7 +2280,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 659268782}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.999975
+  m_Size: 0.99999577
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

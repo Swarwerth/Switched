@@ -32,10 +32,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     
     private void Update()
     {       
-        if (!photonView.IsMine)
-        {
-            return;
-        }
+        if (!photonView.IsMine || Timer.paused) return;
         isMoving = (horz > 0 || horz < 0);
         castRays();        
     }
