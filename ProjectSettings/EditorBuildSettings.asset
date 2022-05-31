@@ -9,17 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/UI/UIScene.unity
     guid: 8ea7f0c71347cd14da7d399994474b3b
   - enabled: 1
-    path: Assets/Scenes/Tuto.unity
-    guid: 5b92aa3901b117d408397cfd5ad15d96
-  - enabled: 1
     path: Assets/Scenes/Lobby/Earth/Earth.unity
     guid: d3f16ac4c80f56540b7fe805fd0f7e69
   - enabled: 1
     path: Assets/Scenes/Lobby/Earth/LobbyEarth.unity
     guid: cfdcccb0f25e7734a91b96a1f40a80bf
   - enabled: 1
-    path: Assets/Scenes/Biomes/Earth/Earth 1.unity
-    guid: d5528e450ad2b2a478ff209c4af59075
+    path: Assets/Scenes/Biomes/Earth/Earth Biome.unity
+    guid: 5b92aa3901b117d408397cfd5ad15d96
   - enabled: 1
     path: Assets/Scenes/Lobby/Hell/Hell.unity
     guid: 74a2c70acb40a0c40a7f641607ee512d
@@ -29,4 +26,31 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Biomes/Hell/Hell 1.unity
     guid: f5b1597297ef1684db3184bc4ec235ee
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Abyss/Abyss.unity
+    guid: e26131ea5e8faba4cbdde1a180333dcd
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Abyss/LobbyAbyss.unity
+    guid: e28cb05335c8f2047adab5180062fc0b
+  - enabled: 1
+    path: Assets/Scenes/Biomes/Abyss/Abyss 1.unity
+    guid: 6ea3cb5646d92304a8008a84b6312a0e
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Sky/Sky.unity
+    guid: a1bff06c01f746640a3c105682c7d0e6
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Sky/LobbySky.unity
+    guid: a650d70819fcbbb449259824958966c4
+  - enabled: 1
+    path: Assets/Scenes/Biomes/Sky/Sky 1.unity
+    guid: b2e00bf8fda5db54bbf14068e52ca7b3
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Minigames/MinigameSetup.unity
+    guid: bf01b7be6f5bc7940bbd20817f9d3ae8
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Minigames/LobbyMinigame.unity
+    guid: b6a2450011dd3dc42b88d8b73955cc40
+  - enabled: 1
+    path: Assets/Scenes/Lobby/Minigames/Minigame 1.unity
+    guid: ca760db0e0534114a8b10c2c0c5ce448
   m_configObjects: {}
