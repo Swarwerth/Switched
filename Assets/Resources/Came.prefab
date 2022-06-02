@@ -249,6 +249,7 @@ MonoBehaviour:
   rayObject: {fileID: 1351443975780006}
   refForGameover: {fileID: 0}
   spawnPoint: {fileID: 0}
+  disableRotation: 0
   moveSpeed: 10
   direction: {x: 0, y: 0}
   dashSpeed: 5
