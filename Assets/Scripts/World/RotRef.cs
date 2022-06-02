@@ -40,7 +40,7 @@ public class RotRef : MonoBehaviour
 
         if (Mathf.Abs(side) == 4) side = 0;
 
-        if (pm.onGround) 
+        if (pm.onGround && !pm.disableRotation) 
         {
             if (Input.GetKeyDown(KeyCode.A))
             {

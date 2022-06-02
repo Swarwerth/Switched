@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby/Hell/Lobbyhell.unity
     guid: 802f986128829314fa2f965a453286df
   - enabled: 1
-    path: Assets/Scenes/Biomes/Hell/Hell 1.unity
+    path: Assets/Scenes/Biomes/Hell/Hell Biome.unity
     guid: f5b1597297ef1684db3184bc4ec235ee
   - enabled: 1
     path: Assets/Scenes/Lobby/Abyss/Abyss.unity
@@ -33,7 +33,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby/Abyss/LobbyAbyss.unity
     guid: e28cb05335c8f2047adab5180062fc0b
   - enabled: 1
-    path: Assets/Scenes/Biomes/Abyss/Abyss 1.unity
+    path: Assets/Scenes/Biomes/Abyss/Abyss Biome.unity
     guid: 6ea3cb5646d92304a8008a84b6312a0e
   - enabled: 1
     path: Assets/Scenes/Lobby/Sky/Sky.unity
@@ -42,7 +42,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby/Sky/LobbySky.unity
     guid: a650d70819fcbbb449259824958966c4
   - enabled: 1
-    path: Assets/Scenes/Biomes/Sky/Sky 1.unity
+    path: Assets/Scenes/Biomes/Sky/Sky Biome.unity
     guid: b2e00bf8fda5db54bbf14068e52ca7b3
   - enabled: 1
     path: Assets/Scenes/Lobby/Minigames/MinigameSetup.unity
@@ -51,6 +51,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby/Minigames/LobbyMinigame.unity
     guid: b6a2450011dd3dc42b88d8b73955cc40
   - enabled: 1
-    path: Assets/Scenes/Lobby/Minigames/Minigame 1.unity
+    path: Assets/Scenes/Lobby/Minigames/Minigame.unity
     guid: ca760db0e0534114a8b10c2c0c5ce448
   m_configObjects: {}
