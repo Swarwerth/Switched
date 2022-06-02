@@ -56,6 +56,7 @@ public class Player : MonoBehaviourPunCallbacks
     public Transform attackPos;
     public float attackRange;
     public LayerMask whatIsEnemy;
+    public LayerMask whatIsBoss;
     public float damage;
     public ParticleSystem blood;
 
@@ -91,13 +92,21 @@ public class Player : MonoBehaviourPunCallbacks
             if (Input.GetButtonDown("Fire1"))
             {
                 Collider[] enemiesToDamage = Physics.OverlapSphere(attackPos.position, attackRange, whatIsEnemy);
+                Collider[] bossToDamage = Physics.OverlapSphere(attackPos.position, attackRange, whatIsBoss);
+
                 timeBetweenAttack = startTimeBetweenAttack;
                 animator.SetTrigger("attack");
                 soundSource.PlayOneShot(AttackSound);
+
                 for (int i = 0; i < enemiesToDamage.Length; i++)
                 {
                     if ((whatIsEnemy.value & 1 << 3) > 0) enemiesToDamage[i].GetComponent<Patrol>().TakeDamage(damage);
                     if (((whatIsEnemy.value & 1 << 6) > 0) && enemiesToDamage[i] != gameObject) enemiesToDamage[i].GetComponent<Player>().TakeDamage(damage);
+                }
+
+                for (int i = 0; i < bossToDamage.Length; i++)
+                {
+                    if ((whatIsBoss.value & 1 << 7) > 0) bossToDamage[i].GetComponent<BossController>().TakeDamage(damage);
                 }
             }
         }

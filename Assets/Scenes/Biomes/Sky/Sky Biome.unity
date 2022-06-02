@@ -650,7 +650,7 @@ PrefabInstance:
         type: 3}
       propertyPath: spawnPoints.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1314507696}
     - target: {fileID: 3101398343254774572, guid: b6537ef2e723b834a80bd6314b5e7295,
         type: 3}
       propertyPath: spawnPoints.Array.data[1]
@@ -909,6 +909,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5167941090539067588, guid: 47e93eba356608c4093b9c4b8c40c817,
     type: 3}
   m_PrefabInstance: {fileID: 1302842104}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1314507696 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6454981485821434258, guid: fe830e300ccf2884bba2ee518bc12de4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1750544748}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1558184845
 PrefabInstance:
