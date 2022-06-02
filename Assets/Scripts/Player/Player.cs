@@ -10,6 +10,7 @@ public class Player : MonoBehaviourPunCallbacks
     [SerializeField] GameObject rayObject;
     [SerializeField] public Transform refForGameover;
     [SerializeField] public Transform spawnPoint;
+    public bool disableRotation;
 
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
@@ -62,6 +63,12 @@ public class Player : MonoBehaviourPunCallbacks
     public bool walled, wallMove;
     bool[] wallHits = new bool[4];
 
+    [Header("Sound")]
+    public AudioSource soundSource;
+    public AudioClip JumpSound;
+    public AudioClip DashSound;
+    public AudioClip AttackSound;
+
     private void Start()
     {
         cntDeath = 0;
@@ -74,7 +81,7 @@ public class Player : MonoBehaviourPunCallbacks
         if (!photonView.IsMine || Timer.paused) return;
 
         refForGameover = GameObject.Find("RefForGameover").transform;
-    
+
         if (health <= 0) Respawn();
 
         if (cntDeath == 3) Debug.Log("-GAMEOVER-");
@@ -86,6 +93,7 @@ public class Player : MonoBehaviourPunCallbacks
                 Collider[] enemiesToDamage = Physics.OverlapSphere(attackPos.position, attackRange, whatIsEnemy);
                 timeBetweenAttack = startTimeBetweenAttack;
                 animator.SetTrigger("attack");
+                soundSource.PlayOneShot(AttackSound);
                 for (int i = 0; i < enemiesToDamage.Length; i++)
                 {
                     if ((whatIsEnemy.value & 1 << 3) > 0) enemiesToDamage[i].GetComponent<Patrol>().TakeDamage(damage);
@@ -100,16 +108,17 @@ public class Player : MonoBehaviourPunCallbacks
             Physics.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundLayer) ||
             Physics.Raycast(transform.position, Vector2.down, groundLength, groundLayer);
 
+        if (onGround || walled) 
+        {
+            jumpCount = 2;
+            dashCount = 1;
+        }
+
         if (Input.GetButtonDown("Jump"))
         {
             jumpTimer = Time.time + jumpDelay;
-            if (!onGround && jumpCount > 0) canJump = true;
-            else
-            {
-                canJump = false;
-                jumpCount = 2;
-                dashCount = 1;
-            }
+            if (!onGround && !walled && jumpCount > 0) canJump = true;
+            else canJump = false;
         }
         
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -124,18 +133,18 @@ public class Player : MonoBehaviourPunCallbacks
 
         castRays();
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.D))
         {
             if (onGround) rb.velocity = new Vector3(0, 0, 0);
         }
 
-        if (Input.GetKey(KeyCode.UpArrow) && walled)
+        if (Input.GetKey(KeyCode.Z) && walled)
         {
             wallMove = true;
             animator.SetBool("isClimb", true);
             rb.isKinematic = true;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow) && wallMove)
+        if (Input.GetKeyDown(KeyCode.S) && wallMove)
         {
             rb.isKinematic = false;
             wallMove = false;
@@ -206,6 +215,7 @@ public class Player : MonoBehaviourPunCallbacks
             rb.velocity = Vector2.left * dashSpeed;
             rb.AddForce(Vector2.up * 5f, ForceMode.Impulse);
         }
+        soundSource.PlayOneShot(DashSound);
         dashCount --;
     }
 
@@ -213,9 +223,11 @@ public class Player : MonoBehaviourPunCallbacks
     {
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(Vector2.up * jumpSpeed, ForceMode.Impulse);
+        soundSource.PlayOneShot(JumpSound);
         jumpTimer = 0;
         jumpCount--;
     }
+
 
     int dir = 1;
     void moveCharacter(float horizontal)

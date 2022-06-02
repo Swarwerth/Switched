@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void Start()
     {       
         isMoving = false;
-        AM = playerRender.gameObject.GetComponent <Animator>();
+        AM = playerRender.gameObject.GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();       
     }
 
@@ -126,11 +126,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
             isJumping = true;            
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && walled)
+        if (Input.GetKeyDown(KeyCode.Z) && walled)
         {
             wallMove = true;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow) && wallMove && grounded2)
+        if (Input.GetKeyDown(KeyCode.S) && wallMove && grounded2)
         {
             wallMove = false;
         }
